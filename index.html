@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Impostor Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- SETUP -->
+    <div id="setup" class="card">
+        <div class="titles">
+           <h1>Juego del Impostor</h1>
+           <h2>pal grupichuli</span>
+        </div>
+      
+      <p class="muted">Añade jugadores y empieza la partida.</p>
+
+      <div class="add-row">
+        <input id="playerNameInput" type="text" placeholder="Nombre del jugador" />
+        <button id="addPlayerBtn" class="btn">Añadir</button>
+      </div>
+
+      <div id="playersChips" class="chips"></div>
+
+      <div class="row">
+        <div class="field">
+          <label class="label">Nº de impostores</label>
+          <input id="impostorsInput" type="number" min="1" value="1" />
+        </div>
+      </div>
+
+      <button id="startBtn" class="btn primary full">Empezar</button>
+      <p id="error" class="error"></p>
+    </div>
+
+    <!-- GAME -->
+    <div id="game" class="card hidden">
+      <h2 id="turnTitle"></h2>
+
+      <div class="secret-box">
+        <p id="secret" class="hidden"></p>
+        <p id="hint" class="muted hidden"></p>
+      </div>
+
+      <div class="buttons">
+        <button id="showBtn" class="btn">Ver</button>
+        <button id="nextBtn" class="btn primary">Siguiente</button>
+      </div>
+    </div>
+
+    <!-- END -->
+    <div id="end" class="card hidden">
+      <h2>¡Listo!</h2>
+      <p class="muted">Todos han visto su rol. ¡A jugar! 😈</p>
+
+      <div class="secret-box" style="margin-top: 14px;">
+        <p class="muted" style="margin: 0 0 6px;">Empieza:</p>
+        <p id="starterName" style="margin: 0; font-size: 20px; font-weight: 800;"></p>
+      </div>
+
+      <button id="restartBtn" class="btn primary full">Jugar de nuevo</button>
+    </div>
+
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
