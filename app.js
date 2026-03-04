@@ -7,6 +7,7 @@ const words = [
   { word: 'mysterguille (guille)', hint: 'ordenador' },
 
   { word: 'fútbol', hint: 'césped' },
+  
   { word: 'playa', hint: 'sal' },
   { word: 'pizza', hint: 'masa' },
   { word: 'navidad', hint: 'nieve' },
@@ -101,6 +102,80 @@ const words = [
   { word: 'paracetamol', hint: 'comodín' },
   { word: 'palo selfie', hint: 'turista' },
   { word: 'rebaque', hint: 'centimos' },
+  { word: 'vergüenza', hint: 'tierra' },
+{ word: 'cotilla', hint: 'ventana' },
+{ word: 'cotilleo', hint: 'rumor' },
+{ word: 'borracho', hint: 'equilibrio' },
+{ word: 'ronquidos', hint: 'noche' },
+{ word: 'babero', hint: 'bebe' },
+{ word: 'bigote', hint: 'labio' },
+{ word: 'calvicie', hint: 'brillo' },
+
+{ word: 'chicle', hint: 'pegar' },
+{ word: 'palomitas', hint: 'crujir' },
+{ word: 'helado', hint: 'frio' },
+{ word: 'sandwich', hint: 'pan' },
+{ word: 'ketchup', hint: 'rojo' },
+{ word: 'mostaza', hint: 'amarillo' },
+
+{ word: 'avion', hint: 'ventana' },
+{ word: 'maleta', hint: 'ruedas' },
+{ word: 'hotel', hint: 'recepcion' },
+{ word: 'turista', hint: 'foto' },
+
+{ word: 'selfie', hint: 'camara' },
+{ word: 'teclado', hint: 'letras' },
+{ word: 'raton', hint: 'click' },
+{ word: 'pantalla', hint: 'brillo' },
+
+{ word: 'fantasma', hint: 'susto' },
+{ word: 'dragon', hint: 'fuego' },
+{ word: 'bruja', hint: 'escoba' },
+{ word: 'duende', hint: 'verde' },
+
+{ word: 'payaso', hint: 'nariz' },
+{ word: 'magia', hint: 'truco' },
+{ word: 'circo', hint: 'carpa' },
+
+{ word: 'peluca', hint: 'disfraz' },
+{ word: 'disfraz', hint: 'fiesta' },
+{ word: 'antifaz', hint: 'ojos' },
+
+{ word: 'calambre', hint: 'pierna' },
+{ word: 'estornudo', hint: 'achis' },
+{ word: 'hipo', hint: 'salto' },
+{ word: 'bostezo', hint: 'sueño' },
+
+{ word: 'alfombra', hint: 'suelo' },
+{ word: 'cortinas', hint: 'ventana' },
+{ word: 'nevera', hint: 'frio' },
+{ word: 'microondas', hint: 'calentar' },
+
+{ word: 'bikini', hint: 'verano' },
+{ word: 'chanquete', hint: 'serie' },
+{ word: 'cactus', hint: 'pinchos' },
+{ word: 'piruleta', hint: 'azucar' },
+{ word: 'caramelo', hint: 'dulce' },
+
+{ word: 'carcajada', hint: 'risa' },
+{ word: 'susurro', hint: 'bajo' },
+{ word: 'grito', hint: 'fuerte' },
+
+{ word: 'monoculo', hint: 'ojo' },
+{ word: 'sombrero', hint: 'cabeza' },
+{ word: 'bufanda', hint: 'cuello' },
+
+{ word: 'calcetines', hint: 'pareja' },
+{ word: 'calzoncillos', hint: 'ropa' },
+{ word: 'bragas', hint: 'cajon' },
+
+{ word: 'piscina', hint: 'cloro' },
+{ word: 'ducha', hint: 'agua' },
+{ word: 'toalla', hint: 'secar' },
+
+{ word: 'pijama', hint: 'noche' },
+{ word: 'colchon', hint: 'dormir' },
+{ word: 'almohada', hint: 'cabeza' }
 ];
 
 
