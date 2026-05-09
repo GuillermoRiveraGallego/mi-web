@@ -2,67 +2,104 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Impostor Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#07070f"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Impostor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <div class="bg-glow bg-glow--1"></div>
+  <div class="bg-glow bg-glow--2"></div>
+  <div class="bg-glow bg-glow--3"></div>
+
   <div class="container">
 
     <!-- SETUP -->
-    <div id="setup" class="card">
-        <div class="titles">
-           <h1>Juego del Impostor</h1>
-           <h2>pal grupichuli</span>
-        </div>
-      
-      <p class="muted">Añade jugadores y empieza la partida.</p>
+    <div id="setup" class="card card-enter">
 
-      <div class="add-row">
-        <input id="playerNameInput" type="text" placeholder="Nombre del jugador" />
-        <button id="addPlayerBtn" class="btn">Añadir</button>
+      <div class="card-header">
+        <div class="logo-icon">😈</div>
+        <h1>Impostor</h1>
+        <p class="subtitle">pal grupichuli</p>
       </div>
 
-      <div id="playersChips" class="chips"></div>
+      <div class="section">
+        <p class="section-label">Jugadores</p>
+        <div class="add-row">
+          <input id="playerNameInput" type="text" placeholder="Nombre del jugador" autocomplete="off" />
+          <button id="addPlayerBtn" class="btn btn-add">+</button>
+        </div>
+        <div id="playersChips" class="chips"></div>
+      </div>
 
-      <div class="row">
-        <div class="field">
-          <label class="label">Nº de impostores</label>
-          <input id="impostorsInput" type="number" min="1" value="1" />
+      <div class="section">
+        <p class="section-label">Impostores</p>
+        <div class="impostor-row">
+          <button id="impostorMinus" class="btn btn-counter">−</button>
+          <input id="impostorsInput" type="number" min="1" value="1" class="impostor-input" />
+          <button id="impostorPlus" class="btn btn-counter">+</button>
         </div>
       </div>
 
-      <button id="startBtn" class="btn primary full">Empezar</button>
+      <button id="startBtn" class="btn btn-primary btn-full">
+        Empezar <span class="btn-arrow">→</span>
+      </button>
       <p id="error" class="error"></p>
+
     </div>
 
     <!-- GAME -->
     <div id="game" class="card hidden">
-      <h2 id="turnTitle"></h2>
 
-      <div class="secret-box">
-        <p id="secret" class="hidden"></p>
-        <p id="hint" class="muted hidden"></p>
+      <div id="progressDots" class="progress-dots"></div>
+
+      <div class="turn-header">
+        <p class="turn-label">Le toca a</p>
+        <h2 id="turnTitle"></h2>
+      </div>
+
+      <div class="secret-box" id="secretBox">
+        <p class="secret-prompt" id="secretPrompt">Pulsa para ver tu rol</p>
+        <p id="secret" class="secret-text hidden"></p>
+        <p id="hint" class="hint-text hidden"></p>
       </div>
 
       <div class="buttons">
-        <button id="showBtn" class="btn">Ver</button>
-        <button id="nextBtn" class="btn primary">Siguiente</button>
+        <button id="showBtn" class="btn btn-secondary btn-flex">
+          <span id="showBtnIcon">👁</span>
+          <span id="showBtnText">Ver</span>
+        </button>
+        <button id="nextBtn" class="btn btn-primary btn-flex">
+          Siguiente <span>→</span>
+        </button>
       </div>
+
     </div>
 
     <!-- END -->
     <div id="end" class="card hidden">
-      <h2>¡Listo!</h2>
-      <p class="muted">Todos han visto su rol. ¡A jugar! 😈</p>
 
-      <div class="secret-box" style="margin-top: 14px;">
-        <p class="muted" style="margin: 0 0 6px;">Empieza:</p>
-        <p id="starterName" style="margin: 0; font-size: 20px; font-weight: 800;"></p>
+      <div class="end-section">
+        <div class="end-icon">🎭</div>
+        <h2 class="end-title">¡A jugar!</h2>
+        <p class="muted">Todos han visto su rol 😈</p>
       </div>
 
-      <button id="restartBtn" class="btn primary full">Jugar de nuevo</button>
+      <div class="starter-box">
+        <p class="starter-label">Empieza la ronda</p>
+        <p id="starterName" class="starter-name"></p>
+      </div>
+
+      <button id="restartBtn" class="btn btn-primary btn-full">
+        Jugar de nuevo
+      </button>
+
     </div>
 
   </div>

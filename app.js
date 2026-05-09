@@ -178,40 +178,45 @@ const words = [
 { word: 'almohada', hint: 'cabeza' }
 ];
 
-
 // DOM
-const setupDiv = document.getElementById('setup');
-const gameDiv = document.getElementById('game');
-const endDiv = document.getElementById('end');
+const setupDiv   = document.getElementById('setup');
+const gameDiv    = document.getElementById('game');
+const endDiv     = document.getElementById('end');
 
 const playerNameInput = document.getElementById('playerNameInput');
-const addPlayerBtn = document.getElementById('addPlayerBtn');
-const playersChips = document.getElementById('playersChips');
+const addPlayerBtn    = document.getElementById('addPlayerBtn');
+const playersChips    = document.getElementById('playersChips');
 
-const impostorsInput = document.getElementById('impostorsInput');
-const startBtn = document.getElementById('startBtn');
-const errorP = document.getElementById('error');
+const impostorsInput  = document.getElementById('impostorsInput');
+const impostorMinus   = document.getElementById('impostorMinus');
+const impostorPlus    = document.getElementById('impostorPlus');
+const startBtn        = document.getElementById('startBtn');
+const errorP          = document.getElementById('error');
 
-const turnTitle = document.getElementById('turnTitle');
-const secretP = document.getElementById('secret');
-const hintP = document.getElementById('hint');
-const showBtn = document.getElementById('showBtn');
-const nextBtn = document.getElementById('nextBtn');
+const progressDotsEl  = document.getElementById('progressDots');
+const turnTitle       = document.getElementById('turnTitle');
+const secretP         = document.getElementById('secret');
+const hintP           = document.getElementById('hint');
+const secretBox       = document.getElementById('secretBox');
+const secretPrompt    = document.getElementById('secretPrompt');
+const showBtn         = document.getElementById('showBtn');
+const showBtnIcon     = document.getElementById('showBtnIcon');
+const showBtnText     = document.getElementById('showBtnText');
+const nextBtn         = document.getElementById('nextBtn');
 
-const restartBtn = document.getElementById('restartBtn');
+const restartBtn    = document.getElementById('restartBtn');
 const starterNameEl = document.getElementById('starterName');
 
 // LocalStorage keys
-const LS_PLAYERS = 'impostor_players_v1';
+const LS_PLAYERS   = 'impostor_players_v1';
 const LS_IMPOSTORS = 'impostor_num_impostors_v1';
 
 // State
 let playerNames = [];
-let players = []; // { name, role } role: "IMPOSTOR" | word
+let players = [];
 let turnIndex = 0;
 let turnsSeen = 0;
 let revealed = false;
-
 let starterIndex = 0;
 let currentHint = '';
 let currentWord = '';
@@ -243,9 +248,23 @@ function loadSetupFromStorage() {
   } catch {
     playerNames = [];
   }
-
   const savedImpostors = Number(localStorage.getItem(LS_IMPOSTORS) || 1);
   impostorsInput.value = String(Number.isFinite(savedImpostors) ? savedImpostors : 1);
+}
+
+function showScreen(el) {
+  el.classList.remove('hidden', 'card-enter');
+  void el.offsetWidth;
+  el.classList.add('card-enter');
+}
+
+function setError(msg) {
+  errorP.textContent = msg;
+  if (msg) {
+    errorP.classList.remove('shake');
+    void errorP.offsetWidth;
+    errorP.classList.add('shake');
+  }
 }
 
 function renderChips() {
@@ -271,48 +290,56 @@ function renderChips() {
 function updateImpostorsMax() {
   const max = Math.max(1, playerNames.length - 1);
   impostorsInput.max = String(max);
-
   const current = Number(impostorsInput.value || 1);
   if (current > max) impostorsInput.value = String(max);
   if (current < 1) impostorsInput.value = '1';
 }
 
+function renderProgress() {
+  progressDotsEl.innerHTML = '';
+  for (let i = 0; i < players.length; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    if (i < turnsSeen)        dot.classList.add('done');
+    else if (i === turnsSeen) dot.classList.add('current');
+    progressDotsEl.appendChild(dot);
+  }
+}
+
+function resetReveal() {
+  secretP.classList.add('hidden');
+  hintP.classList.add('hidden');
+  hintP.textContent = '';
+  secretPrompt.classList.remove('hidden');
+  secretBox.classList.remove('revealed-normal', 'revealed-impostor');
+  revealed = false;
+  showBtnIcon.textContent = '👁';
+  showBtnText.textContent = 'Ver';
+}
+
 function goToEnd() {
   gameDiv.classList.add('hidden');
-  endDiv.classList.remove('hidden');
-
-  const starter = players[starterIndex];
-  starterNameEl.textContent = starter?.name || '';
+  showScreen(endDiv);
+  starterNameEl.textContent = players[starterIndex]?.name || '';
 }
 
 function goToSetup() {
   endDiv.classList.add('hidden');
   gameDiv.classList.add('hidden');
-  setupDiv.classList.remove('hidden');
-
-  secretP.classList.add('hidden');
-  hintP.classList.add('hidden');
-  hintP.textContent = '';
-
-  revealed = false;
-  showBtn.textContent = 'Ver';
+  showScreen(setupDiv);
+  resetReveal();
   errorP.textContent = '';
   starterNameEl.textContent = '';
 }
 
 // Add player
 function addPlayer() {
-  const raw = playerNameInput.value;
-  const name = normalizeName(raw);
-
+  const name = normalizeName(playerNameInput.value);
   if (!name) return;
-
-  const exists = playerNames.some(n => n.toLowerCase() === name.toLowerCase());
-  if (exists) {
-    errorP.textContent = 'Ese jugador ya existe.';
+  if (playerNames.some(n => n.toLowerCase() === name.toLowerCase())) {
+    setError('Ese jugador ya existe.');
     return;
   }
-
   playerNames.push(name);
   playerNameInput.value = '';
   errorP.textContent = '';
@@ -323,10 +350,25 @@ function addPlayer() {
 }
 
 addPlayerBtn.addEventListener('click', addPlayer);
-playerNameInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    addPlayer();
+playerNameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addPlayer(); }
+});
+
+// Impostor counter
+impostorMinus.addEventListener('click', () => {
+  const val = Number(impostorsInput.value);
+  if (val > 1) {
+    impostorsInput.value = String(val - 1);
+    saveSetupToStorage();
+  }
+});
+
+impostorPlus.addEventListener('click', () => {
+  const val = Number(impostorsInput.value);
+  const max = Number(impostorsInput.max) || Math.max(1, playerNames.length - 1);
+  if (val < max) {
+    impostorsInput.value = String(val + 1);
+    saveSetupToStorage();
   }
 });
 
@@ -341,94 +383,80 @@ startBtn.addEventListener('click', () => {
   const numImpostors = Number(impostorsInput.value);
 
   if (names.length < 3) {
-    errorP.textContent = 'Añade al menos 3 jugadores.';
+    setError('Añade al menos 3 jugadores.');
     return;
   }
   if (numImpostors < 1 || numImpostors >= names.length) {
-    errorP.textContent = 'Número de impostores no válido.';
+    setError('Número de impostores no válido.');
     return;
   }
 
-  // 1) Elegimos quién empieza ANTES de enseñar roles
   starterIndex = Math.floor(Math.random() * names.length);
 
-  // 2) Elegimos palabra/pista
   const selected = randomItem(words);
   currentWord = selected.word;
   currentHint = selected.hint;
 
-  // 3) Elegimos impostores
   const impostors = pickImpostors(names.length, numImpostors);
-
-  // 4) Construimos jugadores con roles
   players = names.map((name, i) => ({
     name,
     role: impostors.has(i) ? 'IMPOSTOR' : currentWord,
   }));
 
-  // 5) El “turno de ver rol” empieza por el que empieza la partida
   turnIndex = starterIndex;
   turnsSeen = 0;
-  revealed = false;
 
   setupDiv.classList.add('hidden');
-  gameDiv.classList.remove('hidden');
-
+  showScreen(gameDiv);
   renderTurn();
 });
 
 function renderTurn() {
   const player = players[turnIndex];
-  turnTitle.textContent = `Turno de ${player.name}`;
-
+  turnTitle.textContent = player.name;
   secretP.textContent = player.role;
-
-  secretP.classList.add('hidden');
-  hintP.classList.add('hidden');
-  hintP.textContent = '';
-
-  revealed = false;
-  showBtn.textContent = 'Ver';
+  resetReveal();
+  renderProgress();
 }
 
-showBtn.addEventListener('click', () => {
+function toggleReveal() {
   revealed = !revealed;
 
-  secretP.classList.toggle('hidden', !revealed);
-  showBtn.textContent = revealed ? 'Ocultar' : 'Ver';
+  if (revealed) {
+    secretP.classList.remove('hidden');
+    secretPrompt.classList.add('hidden');
+    showBtnIcon.textContent = '🙈';
+    showBtnText.textContent = 'Ocultar';
 
-  // ✅ SOLO si:
-  // - está revelado
-  // - es impostor
-  // - y es el jugador que empieza (starterIndex)
-  const player = players[turnIndex];
-  const isImpostor = player?.role === 'IMPOSTOR';
-  const isStarter = turnIndex === starterIndex;
+    const player = players[turnIndex];
+    const isImpostor = player?.role === 'IMPOSTOR';
+    const isStarter  = turnIndex === starterIndex;
 
-  if (revealed && isImpostor && isStarter) {
-    hintP.textContent = `Pista: ${currentHint}`;
-    hintP.classList.remove('hidden');
+    secretBox.classList.add(isImpostor ? 'revealed-impostor' : 'revealed-normal');
+
+    if (isImpostor && isStarter) {
+      hintP.textContent = `Pista: ${currentHint}`;
+      hintP.classList.remove('hidden');
+    }
   } else {
-    hintP.textContent = '';
-    hintP.classList.add('hidden');
+    resetReveal();
   }
-});
+}
+
+showBtn.addEventListener('click', toggleReveal);
+secretBox.addEventListener('click', toggleReveal);
 
 nextBtn.addEventListener('click', () => {
   turnsSeen++;
-
   if (turnsSeen >= players.length) {
     goToEnd();
     return;
   }
-
   turnIndex = (turnIndex + 1) % players.length;
   renderTurn();
 });
 
-restartBtn.addEventListener('click', () => {
-  goToSetup();
-});
+restartBtn.addEventListener('click', goToSetup);
 
 // INIT
 loadSetupFromStorage();
